@@ -2,6 +2,7 @@
 pokedexcli
 pokedexcli.exe
 *.exe
+*.log
 
 # OS / Editor files
 .DS_Store
