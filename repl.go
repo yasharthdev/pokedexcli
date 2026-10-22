@@ -29,7 +29,17 @@ func startRepl() {
 			continue
 		}
 		
-		fmt.Printf("Your command was: %s\n", user_input[0])
+		registry := getCommands()
+		// if the user types in a valid command that is present in the registry
+		desc, ok := registry[user_input[0]]
+		if ok {
+			if err := desc.callback(); err != nil {
+				fmt.Errorf("Failed to call the callback function: %v", err)
+			}
+		} else {
+			fmt.Println("Unknown command")
+		}	
+
 	}
 	
 	// check for errors after breaking out
@@ -38,3 +48,26 @@ func startRepl() {
 	}
 }
 
+type cliCommand struct {
+	name string
+	description string
+	callback func() error
+}
+
+
+func getCommands() map[string]cliCommand {
+	commandRegistry := map[string]cliCommand{
+		"exit": {
+			name: "exit command",
+			description: "Exit the Pokedex",
+			callback: commandExit,
+		},
+		"help": {
+			name: "help command",
+			description: "How to use Pokedex",
+			callback: commandHelp,
+		},
+	}
+	
+	return commandRegistry
+}
