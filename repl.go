@@ -72,6 +72,11 @@ func getCommands() map[string]cliCommand {
 			description: "Display a batch of location areas on the map",
 			callback: commandMap,
 		},
+		"mapb": {
+			name: "map back command",
+			description: "Display the previous 20 location areas on the map",
+			callback: commandMapBack,
+		},
 	}
 	
 	return commandRegistry
