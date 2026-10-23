@@ -12,7 +12,7 @@ func cleanInput(text string) []string {
 	return strings.Fields(strings.ToLower(text))
 }
 
-func startRepl(c *config) {
+func startRepl(conf *config) {
 	// read from Stdin
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
@@ -29,11 +29,11 @@ func startRepl(c *config) {
 			continue
 		}
 		
-		// c.commands gives me the registry, gotta check if the
+		// conf.commands gives me the registry, gotta check if the
 		// user typed in a valid command
-		desc, ok := c.commands[user_input[0]]
+		desc, ok := conf.commands[user_input[0]]
 		if ok {
-			if err := desc.callback(c); err != nil {
+			if err := desc.callback(conf); err != nil {
 				fmt.Printf("Failed to call the callback func: %v\n", err)	
 			}
 		} else {
@@ -66,6 +66,11 @@ func getCommands() map[string]cliCommand {
 			name: "help command",
 			description: "How to use Pokedex",
 			callback: commandHelp,
+		},
+		"map": {
+			name: "map command",
+			description: "Display a batch of location areas on the map",
+			callback: commandMap,
 		},
 	}
 	
