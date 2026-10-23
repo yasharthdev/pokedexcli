@@ -12,7 +12,7 @@ func cleanInput(text string) []string {
 	return strings.Fields(strings.ToLower(text))
 }
 
-func startRepl() {
+func startRepl(c *config) {
 	// read from Stdin
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
@@ -29,12 +29,12 @@ func startRepl() {
 			continue
 		}
 		
-		registry := getCommands()
-		// if the user types in a valid command that is present in the registry
-		desc, ok := registry[user_input[0]]
+		// c.commands gives me the registry, gotta check if the
+		// user typed in a valid command
+		desc, ok := c.commands[user_input[0]]
 		if ok {
-			if err := desc.callback(); err != nil {
-				fmt.Errorf("Failed to call the callback function: %v", err)
+			if err := desc.callback(c); err != nil {
+				fmt.Printf("Failed to call the callback func: %v\n", err)	
 			}
 		} else {
 			fmt.Println("Unknown command")
@@ -51,7 +51,7 @@ func startRepl() {
 type cliCommand struct {
 	name string
 	description string
-	callback func() error
+	callback func(*config) error
 }
 
 
@@ -71,3 +71,8 @@ func getCommands() map[string]cliCommand {
 	
 	return commandRegistry
 }
+
+type config struct {
+	commands map[string]cliCommand
+}
+
