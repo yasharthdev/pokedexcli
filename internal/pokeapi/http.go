@@ -7,9 +7,11 @@ import (
 )
 
 // must capitalize the function if we want to import it elsewhere
-func GetLocationAreas(url string) (LocationArea, error) {
-	// here we're going to make the get request for location areas
-	res, err := http.Get(url)
+func GetLocationAreas(url *string) (LocationArea, error) {
+	// here we'll make a request for the LocationArea, a single struct
+	// not a slice of structs. The slice is contained inside Results
+	// I had to dereference the url, since it was a pointer type
+	res, err := http.Get(*url)
 	if err != nil {
 		// return an empty LocationArea struct
 		return LocationArea{}, fmt.Errorf("Error getting a response: %v", err)

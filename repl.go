@@ -79,5 +79,7 @@ func getCommands() map[string]cliCommand {
 
 type config struct {
 	commands map[string]cliCommand
+	nextURL *string
+	previousURL *string
 }
 
